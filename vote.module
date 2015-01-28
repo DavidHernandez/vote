@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_entity_info().
+ */
+function vote_entity_info() {
+  $entities['vote'] = array(
+    'label' => t('Vote'),
+    'plural label' => t('Votes'),
+    'entity class' => '\Drupal\vote\Entity\Vote\Vote',
+    'controller class' => '\Drupal\vote\Entity\Vote\VoteController',
+    'base table' => 'votes',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+      'id' => 'id',
+      'bundle' => 'bundle',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'module' => 'vote',
+  );
+  $entities['vote_type'] = array(
+    'label' => t('Vote type'),
+    'plural label' => t('Vote types'),
+    'entity class' => '\Drupal\vote\Entity\VoteType\VoteType',
+    'controller class' => 'EntityAPIControllerExportable',
+    'entity keys' => array(
+      'bundle' => 'bundle',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'module' => 'vote',
+  );
+  return $entities;
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function vote_entity_info_alter(&$entity_info) {
+  foreach (vote_types() as $type => $info) {
+    $entity_info['vote']['bundles'][$type] = array(
+      'label' => $info->label,
+      'admin' => array(
+        'path' => 'admin/structure/vote/types/%vote_type',
+        'real path' => 'admin/structure/vote/types/' . $type,
+        'bundle argument' => 4,
+      )
+    );
+  }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function vote_menu() {
+  $menu['admin/structure/vote'] = array(
+    'title' => t('Add a vote type'),
+    'access arguments' => array('admin vote settings'),
+  );
+  return $menu;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function vote_permission() {
+  $permissions['admin vote settings'] = array(
+    'title' => t('Administer the vote settings'),
+    'description' => t('Access the page to administer all the vote settings.'),
+  );
+  return $permissions;
+}
+
+function vote_types() {
+  return array();
+}

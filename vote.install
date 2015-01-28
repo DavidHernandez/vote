@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ *  Defines the DB requirements for the vote system.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function vote_schema() {
+  $schema['votes'] = array(
+    'description' => 'Stores the list of votes',
+    'fields' => array(
+      'id' => array(
+        'description' => 'The ID of the vote.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'voting_user' => array(
+        'description' => 'The ID of the user voting.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'voted_user' => array(
+        'description' => 'The ID of the user being voted.',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'entity_id' => array(
+        'description' => 'The ID of the entity that received the vote',
+        'type' => 'int',
+        'not null' => TRUE,
+      ),
+      'entity_type' => array(
+        'description' => 'The entity type that receives the vote',
+        'type' => 'varchar',
+        'length' => 32,
+        'default' => '',
+        'not null' => FALSE,
+      ),
+      'timestamp' => array(
+        'description' => 'The timestamp of when the vote was casted',
+        'type' => 'int',
+        'not null' => TRUE,
+        'unsigned' => TRUE,
+        'default' => 0,
+      ),
+      'bundle' => array(
+        'description' => 'The type of the vote.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+      ),
+      'value' => array(
+        'description' => 'The value of the vote.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+    ),
+    'indexes' => array(
+      'timestamp' => array('timestamp'),
+      'entity_id' => array('entity_id', 'entity_type'),
+      'voting_user' => array('voting_user'),
+      'voted_user' => array('voted_user'),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
+

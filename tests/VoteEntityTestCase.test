@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Adds tests for the VoteEntity.
+ */
+
+class VoteEntityTestCase extends \DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Vote entity tests',
+      'description' => 'Tests the basic functionality of the Vote entity',
+      'group' => 'Vote',
+    );
+  }
+
+  function setUp() {
+    parent::setUp(array('vote'));
+
+    $this->vote = array(
+      'voting_user' => 2,
+      'voted_user' => 3,
+      'timestamp' => 598752000,
+      'entity_id' => 4,
+      'entity_type' => 'node',
+      'bundle' => 'testVote',
+      'value' => 5,
+    );
+  }
+
+  function testVoteEntityCreation() {
+    $vote = entity_create('vote', $this->vote);
+
+var_dump(array($vote, $vote->identifier()));
+    $this->assertEqual($vote->voting_user, $this->vote['voting_user']);
+    $this->assertEqual($vote->voted_user, $this->vote['voted_user']);
+    $this->assertEqual($vote->timestamp, $this->vote['timestamp']);
+    $this->assertEqual($vote->entity_id, $this->vote['entity_id']);
+    $this->assertEqual($vote->entity_type, $this->vote['entity_type']);
+    $this->assertEqual($vote->bundle, $this->vote['bundle']);
+    $this->assertEqual($vote->value, $this->vote['value']);
+    $this->assertTrue(!is_null($vote->identifier()));
+  }
+
+  function testVoteEntityLoading() {
+    $vote = entity_create('vote', $this->vote);
+
+    $loaded_vote = entity_load('vote', array($vote->identifier()));
+
+    /*$this->assertEqual($vote->id, $loaded_vote->id);*/
+    /*$this->assertEqual($vote->voting_user, $loaded_vote->voting_user);*/
+    /*$this->assertEqual($vote->voted_user, $loaded_vote->voted_user);*/
+    /*$this->assertEqual($vote->timestamp, $loaded_vote->timestamp);*/
+    /*$this->assertEqual($vote->entity_id, $loaded_vote->entity_id);*/
+    /*$this->assertEqual($vote->entity_type, $loaded_vote->entity_type);*/
+    /*$this->assertEqual($vote->bundle, $loaded_vote->bundle);*/
+    /*$this->assertEqual($vote->value, $loaded_vote->value);*/
+  }
+
+}

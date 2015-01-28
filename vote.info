@@ -1,0 +1,14 @@
+name = Vote
+description = An entity based voting system.
+version = 7.x-1.0
+core = 7.x
+
+package = custom
+
+dependencies[] = entity
+dependencies[] = plug_field
+dependencies[] = plug_formatter
+dependencies[] = plug_widget
+dependencies[] = xautoload
+
+files[] = tests/VoteEntityTestCase.test
