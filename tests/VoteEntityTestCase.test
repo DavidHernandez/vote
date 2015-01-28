@@ -31,8 +31,8 @@ class VoteEntityTestCase extends \DrupalWebTestCase {
 
   function testVoteEntityCreation() {
     $vote = entity_create('vote', $this->vote);
+    $vote->save();
 
-var_dump(array($vote, $vote->identifier()));
     $this->assertEqual($vote->voting_user, $this->vote['voting_user']);
     $this->assertEqual($vote->voted_user, $this->vote['voted_user']);
     $this->assertEqual($vote->timestamp, $this->vote['timestamp']);
@@ -45,10 +45,13 @@ var_dump(array($vote, $vote->identifier()));
 
   function testVoteEntityLoading() {
     $vote = entity_create('vote', $this->vote);
+    $vote->save();
 
-    $loaded_vote = entity_load('vote', array($vote->identifier()));
+    $loaded_vote = entity_load('vote', array($vote->identifier()), array(), TRUE);
+    $vote_id = $vote->identifier();
+    $loaded_vote_id = $loaded_vote->identifier();
 
-    /*$this->assertEqual($vote->id, $loaded_vote->id);*/
+    $this->assertEqual($vote_id, $loaded_vote_id);
     /*$this->assertEqual($vote->voting_user, $loaded_vote->voting_user);*/
     /*$this->assertEqual($vote->voted_user, $loaded_vote->voted_user);*/
     /*$this->assertEqual($vote->timestamp, $loaded_vote->timestamp);*/
