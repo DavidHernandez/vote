@@ -9,7 +9,7 @@
  * Implements hook_schema().
  */
 function vote_schema() {
-  $schema['votes'] = array(
+  $schema['vote'] = array(
     'description' => 'Stores the list of votes',
     'fields' => array(
       'id' => array(
@@ -67,6 +67,59 @@ function vote_schema() {
       'voted_user' => array('voted_user'),
     ),
     'primary key' => array('id'),
+  );
+
+  $schema['vote_type'] = array(
+    'description' => 'Stores the information of the different types of vote.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Internal identifier for the VoteType.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'type' => array(
+        'description' => 'Machine name to identify the type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'label' => array(
+        'description' => 'Human name to identify the type.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'description' => array(
+        'description' => 'A short description of the type',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'medium',
+        'translatable' => TRUE,
+      ),
+      'status' => array(
+        'description' => 'The exportable status of the type.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0x01,
+        'size' => 'tiny',
+      ),
+      'module' => array(
+        'description' => 'The name of the providing module if the entity has been defined in code.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'available_values' => array(
+        'description' => 'The list of available values to vote',
+        'type' => 'text',
+        'not null' => TRUE,
+        'size' => 'medium',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'type' => array('type'),
+    ),
   );
   return $schema;
 }

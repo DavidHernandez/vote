@@ -11,4 +11,5 @@ dependencies[] = plug_formatter
 dependencies[] = plug_widget
 dependencies[] = xautoload
 
-files[] = tests/VoteEntityTestCase.test
+files[] = tests/VoteTestCase.test
+files[] = tests/VoteTypeTestCase.test

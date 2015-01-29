@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Adds tests for the VoteEntity.
+ * Adds tests for the Vote entity.
  */
 
-class VoteEntityTestCase extends \DrupalWebTestCase {
+class VoteTestCase extends \DrupalWebTestCase {
 
   public static function getInfo() {
     return array(
@@ -29,7 +29,7 @@ class VoteEntityTestCase extends \DrupalWebTestCase {
     );
   }
 
-  function testVoteEntityCreation() {
+  function testVoteCreation() {
     $vote = entity_create('vote', $this->vote);
     $vote->save();
 
@@ -43,7 +43,7 @@ class VoteEntityTestCase extends \DrupalWebTestCase {
     $this->assertTrue(!is_null($vote->identifier()));
   }
 
-  function testVoteEntityLoading() {
+  function testVoteLoading() {
     $vote = entity_create('vote', $this->vote);
     $vote->save();
 

@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Adds tests for the VoteType entity.
+ */
+
+class VoteTypeTestCase extends \DrupalWebTestCase {
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Vote type entity tests',
+      'description' => 'Tests the basic functionality of the VoteType entity',
+      'group' => 'Vote',
+    );
+  }
+
+  function setUp() {
+    parent::setUp(array('vote'));
+
+    $this->vote_type = array(
+      'type' => 'test_vote',
+      'label' => 'Test vote',
+      'description' => 'A test vote type.',
+      'module' => 'vote',
+      'available_values' => '0|0,1|1',
+    );
+  }
+
+  function testVoteTypeCreation() {
+    $vote_type = entity_create('vote_type', $this->vote_type);
+    $vote_type->save();
+
+    $this->assertEqual($vote_type->type, $this->vote_type['type']);
+    $this->assertEqual($vote_type->label, $this->vote_type['label']);
+    $this->assertEqual($vote_type->description, $this->vote_type['description']);
+    $this->assertEqual($vote_type->module, $this->vote_type['module']);
+    $this->assertEqual($vote_type->available_values, $this->vote_type['available_values']);
+    $this->assertEqual($vote_type->status, 0x01);
+    $this->assertTrue(!is_null($vote_type->identifier()));
+  }
+
+  function testVoteTypeLoading() {
+    $vote_type = entity_create('vote_type', $this->vote_type);
+    $vote_type->save();
+
+    $loaded_vote_types = entity_load('vote_type', array($vote_type->identifier()), array(), TRUE);
+    $loaded_vote_type = array_pop($loaded_vote_types);
+
+    $this->assertEqual($vote_type->identifier(), $loaded_vote_type->identifier());
+    $this->assertEqual($vote_type->type, $loaded_vote_type->type);
+    $this->assertEqual($vote_type->label, $loaded_vote_type->label);
+    $this->assertEqual($vote_type->description, $loaded_vote_type->description);
+    $this->assertEqual($vote_type->module, $loaded_vote_type->module);
+    $this->assertEqual($vote_type->available_values, $loaded_vote_type->available_values);
+    $this->assertEqual($vote_type->status, $loaded_vote_type->status);
+  }
+
+}

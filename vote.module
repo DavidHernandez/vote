@@ -13,8 +13,8 @@ function vote_entity_info() {
     'plural label' => t('Votes'),
     'entity class' => '\Drupal\vote\Entity\Vote\Vote',
     'controller class' => '\Drupal\vote\Entity\Vote\VoteController',
-    'base table' => 'votes',
-    'fieldable' => TRUE,
+    'base table' => 'vote',
+    'fieldable' => FALSE,
     'entity keys' => array(
       'id' => 'id',
       'bundle' => 'bundle',
@@ -23,35 +23,34 @@ function vote_entity_info() {
     'uri callback' => 'entity_class_uri',
     'module' => 'vote',
   );
+
+  foreach (vote_types() as $type => $info) {
+    $entities['vote']['bundles'][$type] = array(
+      'label' => $info->label,
+      'admin' => array(
+        'path' => 'admin/structure/votes/types/%vote_type',
+        'real path' => 'admin/structure/votes/types/' . $type,
+        'bundle argument' => 4,
+      )
+    );
+  }
+
   $entities['vote_type'] = array(
     'label' => t('Vote type'),
     'plural label' => t('Vote types'),
-    'entity class' => '\Drupal\vote\Entity\VoteType\VoteType',
-    'controller class' => 'EntityAPIControllerExportable',
+    'entity class' => '\Drupal\vote\Entity\Vote\VoteType',
+    'controller class' => '\Drupal\vote\Entity\Vote\VoteTypeController',
+    'base table' => 'vote_type',
+    'fieldable' => FALSE,
     'entity keys' => array(
-      'bundle' => 'bundle',
+      'id' => 'id',
+      'name' => 'type',
     ),
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
     'module' => 'vote',
   );
   return $entities;
-}
-
-/**
- * Implements hook_entity_info_alter().
- */
-function vote_entity_info_alter(&$entity_info) {
-  foreach (vote_types() as $type => $info) {
-    $entity_info['vote']['bundles'][$type] = array(
-      'label' => $info->label,
-      'admin' => array(
-        'path' => 'admin/structure/vote/types/%vote_type',
-        'real path' => 'admin/structure/vote/types/' . $type,
-        'bundle argument' => 4,
-      )
-    );
-  }
 }
 
 /**
