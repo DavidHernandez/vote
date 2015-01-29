@@ -1,6 +1,6 @@
 name = Vote
 description = An entity based voting system.
-version = 7.x-1.0
+version = 7.x-1.x-dev
 core = 7.x
 
 package = custom
