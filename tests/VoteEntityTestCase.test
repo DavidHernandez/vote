@@ -47,18 +47,17 @@ class VoteEntityTestCase extends \DrupalWebTestCase {
     $vote = entity_create('vote', $this->vote);
     $vote->save();
 
-    $loaded_vote = entity_load('vote', array($vote->identifier()), array(), TRUE);
-    $vote_id = $vote->identifier();
-    $loaded_vote_id = $loaded_vote->identifier();
+    $loaded_votes = entity_load('vote', array($vote->identifier()), array(), TRUE);
+    $loaded_vote = array_pop($loaded_votes);
 
-    $this->assertEqual($vote_id, $loaded_vote_id);
-    /*$this->assertEqual($vote->voting_user, $loaded_vote->voting_user);*/
-    /*$this->assertEqual($vote->voted_user, $loaded_vote->voted_user);*/
-    /*$this->assertEqual($vote->timestamp, $loaded_vote->timestamp);*/
-    /*$this->assertEqual($vote->entity_id, $loaded_vote->entity_id);*/
-    /*$this->assertEqual($vote->entity_type, $loaded_vote->entity_type);*/
-    /*$this->assertEqual($vote->bundle, $loaded_vote->bundle);*/
-    /*$this->assertEqual($vote->value, $loaded_vote->value);*/
+    $this->assertEqual($vote->identifier(), $loaded_vote->identifier());
+    $this->assertEqual($vote->voting_user, $loaded_vote->voting_user);
+    $this->assertEqual($vote->voted_user, $loaded_vote->voted_user);
+    $this->assertEqual($vote->timestamp, $loaded_vote->timestamp);
+    $this->assertEqual($vote->entity_id, $loaded_vote->entity_id);
+    $this->assertEqual($vote->entity_type, $loaded_vote->entity_type);
+    $this->assertEqual($vote->bundle, $loaded_vote->bundle);
+    $this->assertEqual($vote->value, $loaded_vote->value);
   }
 
 }
