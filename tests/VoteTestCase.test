@@ -47,8 +47,7 @@ class VoteTestCase extends \DrupalWebTestCase {
     $vote = entity_create('vote', $this->vote);
     $vote->save();
 
-    $loaded_votes = entity_load('vote', array($vote->identifier()), array(), TRUE);
-    $loaded_vote = array_pop($loaded_votes);
+    $loaded_vote = vote_load($vote->identifier());
 
     $this->assertEqual($vote->identifier(), $loaded_vote->identifier());
     $this->assertEqual($vote->voting_user, $loaded_vote->voting_user);

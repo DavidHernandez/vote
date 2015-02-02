@@ -2,7 +2,10 @@
 
 /**
  * @file
+ *  Adds the hooks for adding the Vote and VoteType entities.
  */
+
+module_load_include('inc', 'vote', 'includes/vote.api');
 
 /**
  * Implements hook_entity_info().
@@ -54,12 +57,111 @@ function vote_entity_info() {
 }
 
 /**
+ * Implements hook_entity_property_info_alter().
+ */
+function vote_entity_property_info_alter(&$info) {
+  $properties = &$info['vote']['properties'];
+  $info['voting_user'] = array(
+    'label' => t('Voting user'),
+    'type' => 'user',
+    'description' => t('The user who voted on the entity.'),
+    'schema field' => 'voting_user',
+  );
+  $info['voted_user'] = array(
+    'label' => t('Voted user'),
+    'type' => 'user',
+    'description' => t('The author of the voted entity.'),
+    'schema field' => 'voted_user',
+  );
+  $info['timestamp'] = array(
+    'label' => t('Voted date'),
+    'type' => 'date',
+    'description' => t('The date when the vote was casted.'),
+    'schema field' => 'timestamp',
+  );
+  $info['entity_id'] = array(
+    'label' => t('Entity ID'),
+    'type' => 'entity',
+    'description' => t('The entity ID that has been voted.'),
+    'setter callback' => 'vote_set_entity_callback',
+    'getter callback' => 'vote_get_entity_callback',
+  );
+  $info['bundle'] = array(
+    'label' => t('Bundle'),
+    'type' => 'text',
+    'description' => t('The type of vote.'),
+    'schema field' => 'bundle',
+  );
+}
+
+function vote_set_entity_callback($item, $property_name, $wrapper) {
+  // TODO Review this.
+  dpm($item);
+}
+
+function vote_get_entity_callback($item) {
+  // TODO Review this.
+  dpm($item);
+}
+
+/**
  * Implements hook_menu().
  */
 function vote_menu() {
   $menu['admin/structure/vote'] = array(
-    'title' => t('Add a vote type'),
-    'access arguments' => array('admin vote settings'),
+    'title' => t('List all votes'),
+    'access arguments' => array('admin votes'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/add'] = array(
+    'title' => t('Add new vote'),
+    'access arguments' => array('admin votes'),
+    'page callback' => 'vote_add_page',
+    'file' => 'includes/vote.form.inc',
+  );
+  $menu['admin/structure/vote/add/%vote_type'] = array(
+    'title' => t('Add new vote'),
+    'access arguments' => array('admin votes'),
+    'page callback' => 'vote_entity_add',
+    'page arguments' => array(4),
+    'file' => 'includes/vote.form.inc',
+  );
+  $menu['admin/structure/vote/%vote/edit'] = array(
+    'title' => t('Edit vote'),
+    'access arguments' => array('admin votes'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/%vote/delete'] = array(
+    'title' => t('Delete the vote'),
+    'access arguments' => array('admin votes'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/type'] = array(
+    'title' => t('List all vote types'),
+    'access arguments' => array('admin vote types'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/type/add'] = array(
+    'title' => t('Add new vote type'),
+    'access arguments' => array('admin vote types'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/type/%vote_type/edit'] = array(
+    'title' => t('Edit a vote type'),
+    'access arguments' => array('admin vote types'),
+    'page callback' => '',
+    'file' => '',
+  );
+  $menu['admin/structure/vote/type/%vote_type/delete'] = array(
+    'title' => t('Delete a vote type'),
+    'access arguments' => array('admin vote types'),
+    'page callback' => '',
+    'file' => '',
   );
   return $menu;
 }
@@ -68,13 +170,23 @@ function vote_menu() {
  * Implements hook_permission().
  */
 function vote_permission() {
-  $permissions['admin vote settings'] = array(
-    'title' => t('Administer the vote settings'),
-    'description' => t('Access the page to administer all the vote settings.'),
+  $permissions['admin vote types'] = array(
+    'title' => t('Administer vote types'),
+    'description' => t('Allows the user to administer the vote types.'),
+  );
+  $permissions['admin votes'] = array(
+    'title' => t('Administer votes'),
+    'description' => t('Allows the user to administer the vote entities.'),
   );
   return $permissions;
 }
 
+/**
+ * Returns the list of vote types.
+ */
 function vote_types() {
+  $q = db_select('vote_type', 'v');
+  $q->fields('v');
+  $types = $q->execute()->fetchAllAssoc('type');
   return array();
 }

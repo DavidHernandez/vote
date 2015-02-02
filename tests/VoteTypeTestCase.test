@@ -44,8 +44,7 @@ class VoteTypeTestCase extends \DrupalWebTestCase {
     $vote_type = entity_create('vote_type', $this->vote_type);
     $vote_type->save();
 
-    $loaded_vote_types = entity_load('vote_type', array($vote_type->identifier()), array(), TRUE);
-    $loaded_vote_type = array_pop($loaded_vote_types);
+    $loaded_vote_type = vote_type_load($vote_type->identifier());
 
     $this->assertEqual($vote_type->identifier(), $loaded_vote_type->identifier());
     $this->assertEqual($vote_type->type, $loaded_vote_type->type);
