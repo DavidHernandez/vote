@@ -7,7 +7,9 @@
 
 namespace Drupal\Vote\Entity\Vote;
 
-class VoteTypeController extends \EntityAPIControllerExportable {
+use \EntityAPIControllerExportable;
+
+class VoteTypeController extends EntityAPIControllerExportable {
 
   /**
    * {@inheritdoc}

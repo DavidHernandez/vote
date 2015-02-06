@@ -7,10 +7,19 @@
 
 namespace Drupal\vote\Entity\Vote;
 
-class Vote extends \Entity {
+use \Entity;
+
+class Vote extends Entity {
 
   protected function defaultUri() {
     return array('path' => 'vote/' . $this->identifier());
+  }
+
+  public function get($field, $defaultValue = '') {
+    if (isset($this->{$field}) && !empty($this->{$field})) {
+      $defaultValue = $this->{$field};
+    }
+    return $defaultValue;
   }
 }
 

@@ -45,6 +45,7 @@ function vote_entity_info() {
     'controller class' => '\Drupal\vote\Entity\Vote\VoteTypeController',
     'base table' => 'vote_type',
     'fieldable' => FALSE,
+    'bundle of' => 'vote',
     'entity keys' => array(
       'id' => 'id',
       'name' => 'type',
@@ -52,6 +53,11 @@ function vote_entity_info() {
     'label callback' => 'entity_class_label',
     'uri callback' => 'entity_class_uri',
     'module' => 'vote',
+    'admin ui' => array(
+      'path' => 'admin/structure/vote/type/add',
+      'file' => 'vote.form.inc',
+      'controller class' => '\Drupal\vote\Entity\Vote\VoteTypeUIController',
+    ),
   );
   return $entities;
 }
@@ -111,8 +117,8 @@ function vote_menu() {
   $menu['admin/structure/vote'] = array(
     'title' => t('List all votes'),
     'access arguments' => array('admin votes'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'vote_add_page',
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/add'] = array(
     'title' => t('Add new vote'),
@@ -130,38 +136,44 @@ function vote_menu() {
   $menu['admin/structure/vote/%vote/edit'] = array(
     'title' => t('Edit vote'),
     'access arguments' => array('admin votes'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_form', 3),
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/%vote/delete'] = array(
     'title' => t('Delete the vote'),
     'access arguments' => array('admin votes'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_delete_form', 3),
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/type'] = array(
     'title' => t('List all vote types'),
     'access arguments' => array('admin vote types'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_type_entity_form'),
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/type/add'] = array(
     'title' => t('Add new vote type'),
     'access arguments' => array('admin vote types'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_type_entity_form'),
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/type/%vote_type/edit'] = array(
     'title' => t('Edit a vote type'),
     'access arguments' => array('admin vote types'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_form', 3),
+    'file' => 'includes/vote.form.inc',
   );
   $menu['admin/structure/vote/type/%vote_type/delete'] = array(
     'title' => t('Delete a vote type'),
     'access arguments' => array('admin vote types'),
-    'page callback' => '',
-    'file' => '',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('vote_type_delete_form', 3),
+    'file' => 'includes/vote.form.inc',
   );
   return $menu;
 }

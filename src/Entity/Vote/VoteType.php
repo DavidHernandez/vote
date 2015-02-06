@@ -7,11 +7,19 @@
 
 namespace Drupal\Vote\Entity\Vote;
 
-class VoteType extends \Entity {
+use \Entity;
+
+class VoteType extends Entity {
 
   public function __construct($values = array()) {
     parent::__construct($values, 'vote_type');
   }
 
+  public function get($field, $defaultValue = '') {
+    if (isset($this->{$field}) && !empty($this->{$field})) {
+      $defaultValue = $this->{$field};
+    }
+    return $defaultValue;
+  }
 }
 

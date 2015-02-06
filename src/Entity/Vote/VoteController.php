@@ -7,7 +7,9 @@
 
 namespace Drupal\vote\Entity\Vote;
 
-class VoteController extends \EntityAPIController {
+use \EntityAPIController;
+
+class VoteController extends EntityAPIController {
 
   /**
    * {@inheritdoc}
